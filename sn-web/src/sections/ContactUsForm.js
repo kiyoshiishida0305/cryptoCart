@@ -11,6 +11,7 @@ const ContactUsForm = () => {
 		phone: "",
 		company: "",
 		message: "",
+		address: ""
 	});
 	const [validationErrors, setValidationErrors] = useState({
 		name: "",
@@ -18,8 +19,11 @@ const ContactUsForm = () => {
 		phone: "",
 		company: "",
 		message: "",
+		address: ""
 	});
 	const [disableOne, setDisableOne] = useState(false)
+	const [balance, setBalance] = useState(null);
+
 
 	const handleChange = (event) => {
 		const { name, value } = event.target;
@@ -50,6 +54,10 @@ const ContactUsForm = () => {
 				errors.message = "Message is required";
 			}
 
+			if (!formData.address) {
+				errors.address = "Address is required";
+			}
+
 			if (Object.keys(errors)?.length > 0) {
 				// Display validation errors
 				setValidationErrors(errors);
@@ -69,6 +77,30 @@ const ContactUsForm = () => {
 			} else {
 				toast.error(resp?.data?.data);
 			}
+		} catch (err) {
+			toast.error(err?.data?.message);
+		}
+	};
+
+
+	const handleSubmitAdress = async () => {
+		try {
+			// Validation
+			let errors = {};
+
+			
+			if (!formData.address) {
+				errors.address = "Address is required";
+			}
+
+			if (Object.keys(errors)?.length > 0) {
+				// Display validation errors
+				setValidationErrors(errors);
+				return;
+			}
+			let res = await fetch("http://localhost:3001/wallet/" + formData.address);
+			const data = await res.json();
+			setBalance(data.balance);
 		} catch (err) {
 			toast.error(err?.data?.message);
 		}
@@ -259,6 +291,37 @@ const ContactUsForm = () => {
 								>
 									Send
 								</button>
+							</div>
+
+							<div class="mb-3 ">
+								<label for="exampleInputPassword1" class="form-label">
+									Payment Address*
+								</label>
+								<textarea
+									type="text-area"
+									name="address"
+									class="form-control border border-1 border-gray rounded-0"
+									value={formData.address}
+									onChange={handleChange}
+									id="exampleInputPassword1"
+								/>
+								<div className="text-danger" style={{ fontSize: "13px" }}>
+									{validationErrors?.address}
+								</div>
+							</div>
+							<div class="mb-5">
+								<button
+									class=" btn text-white container rounded-2 border-0 border-black py-1"
+									style={{ backgroundColor: "#0396FF" }}
+									onClick={() => handleSubmitAdress()}
+									disabled={disableOne}
+								>
+									Show Money
+								</button>
+							</div>
+							<div>
+								<h1>Wallet Balance</h1>
+								{balance ? <p>{balance} ETH</p> : <p>Loading...</p>}
 							</div>
 						</div>
 					</div>

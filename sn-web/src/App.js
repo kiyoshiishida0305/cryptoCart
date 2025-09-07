@@ -6,17 +6,6 @@ import { apiGET } from "./utilities/apiHelpers";
 
 function App() {
 	const [metaData, setMetaData] = useState([]);
-	const [balance, setBalance] = useState(null);
-
-	useEffect(() => {
-    	async function fetchBalance() {
-		const res = await fetch("http://localhost:3001/wallet/0xbC01e5D76E7A3BF0041c260d42469d2EE750D167");
-		const data = await res.json();
-		setBalance(data.balance);
-		}
-		fetchBalance();
-	}, []);
-
 
 	let fetchSiteMetadata = async () => {
 		try {
@@ -55,10 +44,6 @@ function App() {
 			</div>
 			<div className="App avenir">
 				<SiteRoutes />
-			</div>
-			<div>
-				<h1>Wallet Balance</h1>
-				{balance ? <p>{balance} ETH</p> : <p>Loading...</p>}
 			</div>
 		</>
 	);

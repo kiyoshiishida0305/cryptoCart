@@ -107,7 +107,7 @@ const NavbarTwo = () => {
 
 	let fetchSiteMetadata = async () => {
 		let res = await apiGET(`/v1/site-metadata/get-site-metadata-by-type?type=${"navbar"}`);
-		if (res?.status == 200) setSiteData(res.data.data.data[0].statements);
+		// if (res?.status == 200) setSiteData(res.data.data.data[0].statements);
 	};
 
 	useEffect(() => {
